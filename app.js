@@ -16,10 +16,7 @@
 
 // module.exports = app;
 
-require('dotenv').config();
 const express = require('express');
-const config = require('./src/config/config');
-
 const app = express();
 
 // Middleware
@@ -41,14 +38,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Start server
-const port = config.port;
-const server = app.listen(port, (err) => {
-  if (err) {
-    return console.error('Failed to start server:', err);
-  }
-  console.log(`Server is running on port ${port}`);
-  console.log(`Health check: http://localhost:${port}/health`);
-});
-
-module.exports = { app, server };
+module.exports = app;

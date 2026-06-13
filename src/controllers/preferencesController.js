@@ -11,7 +11,7 @@ const getPreferences = async (req, res) => {
     }
     
     // Find full user data
-    const fullUser = findUserByEmail(user.email);
+    const fullUser = await findUserByEmail(user.email);
     if (!fullUser) {
       return res.status(404).json({ error: 'User not found' });
     }

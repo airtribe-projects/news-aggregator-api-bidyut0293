@@ -1,6 +1,6 @@
 const tap = require('tap');
 const supertest = require('supertest');
-const { app, server: httpServer } = require('../app');
+const app = require('../app');
 const server = supertest(app);
 
 const mockUser = {
@@ -96,6 +96,4 @@ tap.test('GET /news without token', async (t) => {
 
 
 
-tap.teardown(() => {
-    httpServer.close();
-});
+tap.teardown(() => {});

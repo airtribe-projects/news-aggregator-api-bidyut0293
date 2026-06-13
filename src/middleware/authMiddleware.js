@@ -12,7 +12,7 @@ const authenticateToken = (req, res, next) => {
 
     jwt.verify(token, config.jwt.secret, (err, decoded) => {
         if (err) {
-            return res.status(403).json({error: 'Invalid or expired token'});
+            return res.status(401).json({error: 'Invalid or expired token'});
         }
 
         // Attach the decoded user information to the request object

@@ -1,55 +1,45 @@
 // In-memory user model for demonstration purposes
 const users = new Map();
 
-// Generate a unique ID for the user
 let userIdCounter = 1;
 const generateUserId = () => `user${userIdCounter++}`;
 
-// Create a new user
 const createUser = async (userData) => {
-    const {name, email, password, preferences = []} = userData;
+    const { name, email, password, preferences = [] } = userData;
+    const normalizedEmail = email.toLowerCase();
 
-    // Check if user already exists
-    if (users.has(email)) {
-        return {error: 'User already exists'};
+    if (users.has(normalizedEmail)) {
+        const err = new Error('User already exists');
+        err.code = 'USER_EXISTS';
+        throw err;
     }
 
     const id = generateUserId();
-    const user = {id, name, email, password, preferences, createdAt: new Date().toISOString()};
-
-    users.set(email, user);
+    const user = { id, name, email: normalizedEmail, password, preferences, createdAt: new Date().toISOString() };
+    users.set(normalizedEmail, user);
     return user;
 };
 
-// Find a user by email
-const findUserByEmail = (email) => {
-    return users.get(email) || null;
+const findUserByEmail = async (email) => {
+    return users.get(email.toLowerCase()) || null;
 };
 
-// Find a user by ID
 const findUserById = (id) => {
     for (const user of users.values()) {
-        if (user.id === id) {
-            return user;
-        }
+        if (user.id === id) return user;
     }
     return null;
 };
 
-// Update user preferences
 const updateUserPreferences = (email, newPreferences) => {
-    const user = users.get(email);
+    const normalizedEmail = email.toLowerCase();
+    const user = users.get(normalizedEmail);
     if (user) {
         user.preferences = newPreferences;
-        users.set(email, user);
+        users.set(normalizedEmail, user);
         return user;
     }
     return null;
 };
 
-module.exports = {
-    createUser,
-    findUserByEmail,
-    findUserById,
-    updateUserPreferences
-};
+module.exports = { createUser, findUserByEmail, findUserById, updateUserPreferences };
